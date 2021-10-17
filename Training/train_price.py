@@ -9,11 +9,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import pycoingecko
 import pickle
+from datetime import date, timedelta
 
 filename = 'finalized.sav'
 
 def train_price(currency):
-   df = pd.read_csv('./data/archive/coin_' + currency + '.csv')
+   df = pd.read_csv('./../data/archive/coin_' + currency + '.csv')
    
    # taking the features we are interested in and creating a new dataframe
    interested_features = ["Open", "Close", "High", "Low", "Marketcap"]
@@ -32,7 +33,7 @@ def train_price(currency):
    
    # now, we create our Random Forests Model.
    # TODO: Add parameters to prevent overfitting.
-   rf_model = RandomForestRegressor(n_estimators=500, max_features=3, min_samples_leaf=50)
+   rf_model = RandomForestRegressor(n_estimators=500, max_features=3, min_samples_leaf=1)
    rf_model.fit(xtrain, ytrain.values.ravel())
    
    # predicting the values 
@@ -52,15 +53,28 @@ def real_time_test(currency):
     cleaned_real_time_df = real_time_df[["High", "Low", "Marketcap"]]
     real_time_result = real_time_df["Close"]
 
+    days = []
+    for i in range(181):
+        days.append((date.today() - timedelta(days=i)).isoformat())
+    
+    days.reverse()
+    print(days)
+
+    final_real_time_df = pd.DataFrame()
+    final_real_time_df["Date"] = days
+    final_real_time_df["Price"] = real_time_result
+
     if not os.path.isfile('real_time_result_rf'):
-        real_time_result.to_csv('real_time_result_rf.csv')
+        final_real_time_df.to_csv('real_time_result_rf.csv')
 
     load_model = pickle.load(open(filename, 'rb'))
     result = load_model.predict(cleaned_real_time_df)
     print(result)
 
     if not os.path.isfile('predicted_result_rf'):
-        predicted_df = pd.DataFrame(result)
+        predicted_df = pd.DataFrame()
+        predicted_df["Date"] = days
+        predicted_df["Price"] = result
         predicted_df.to_csv('predicted_result_rf.csv')
          
 
