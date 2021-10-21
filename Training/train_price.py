@@ -41,7 +41,6 @@ def train_price(currency):
    if not os.path.isfile(filename):
     pickle.dump(rf_model, open(filename, 'wb'))
 
-
 def real_time_test(currency):
     cg = pycoingecko.CoinGeckoAPI()
     real_time_df = pd.DataFrame(
@@ -54,7 +53,7 @@ def real_time_test(currency):
     real_time_result = real_time_df["Close"]
 
     days = []
-    for i in range(181):
+    for i in range(len(real_time_result)):
         days.append((date.today() - timedelta(days=i)).isoformat())
     
     days.reverse()
@@ -63,15 +62,33 @@ def real_time_test(currency):
     final_real_time_df = pd.DataFrame()
     final_real_time_df["Date"] = days
     final_real_time_df["Price"] = real_time_result
+    
+    if len(final_real_time_df["Date"]) != len(final_real_time_df["Price"]):
+        final_real_time_df["Price"].append(cg.get_price(ids=currency.lower(), vs_currencies='usd'))
+        print("This was executed")
 
     if not os.path.isfile('real_time_result_rf'):
+        final_real_time_df.to_csv('real_time_result_rf.csv')
+    else:
+        os.remove('real_time_result_rf.csv')
         final_real_time_df.to_csv('real_time_result_rf.csv')
 
     load_model = pickle.load(open(filename, 'rb'))
     result = load_model.predict(cleaned_real_time_df)
+
+    # TODO: Possible fix. Check out tomorrow morning asap
+    if len(result) != len(days):
+        print("This was executed")
+        result.append(cg.get_price(ids=currency.lower(), vs_currencies='usd'))
     print(result)
 
     if not os.path.isfile('predicted_result_rf'):
+        predicted_df = pd.DataFrame()
+        predicted_df["Date"] = days
+        predicted_df["Price"] = result
+        predicted_df.to_csv('predicted_result_rf.csv')
+    else:
+        os.remove('predicted_result_rf.csv')
         predicted_df = pd.DataFrame()
         predicted_df["Date"] = days
         predicted_df["Price"] = result
