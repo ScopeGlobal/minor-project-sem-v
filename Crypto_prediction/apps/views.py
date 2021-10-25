@@ -4,16 +4,22 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import auth
 from .forms import SignInForm, SignUpForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
 from django.shortcuts import render
+
+# chart imports
+from django.db.models import ObjectDoesNotExist
+import json
 
 # razorpay imports
 import razorpay
 from django.views.decorators.csrf import csrf_exempt
-# Create your views here.
 
+# training imports
+from Training.train_price import real_time_test, train_price
+
+# Create your views here.
 def index(request):
     return render(request, 'index.html')
 
@@ -97,3 +103,13 @@ def payment(request):
 @csrf_exempt
 def success(request):
     return render("success")
+
+def real_time_test(request):
+    context ={}
+    days = []
+    result =[]
+    results = real_time_test('Bitcoin')
+    days = results.days
+    result = results.result
+    context = {"days" : days , "result" : result}
+    return render(request, 'visualization/coin-info.html', context)

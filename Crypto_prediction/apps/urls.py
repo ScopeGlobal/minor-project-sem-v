@@ -14,8 +14,10 @@ urlpatterns = [
     path('logout',views.logoutUser,name='logout'), 
     url(r'profile/(?P<username>.+)/$', views.profile, name="profile"),
     path('coin-info',views.coin_info, name="coin-info"),
+    path('real_time_test',views.real_time_test, name="real_time_test"),
     path('detailed-prediction',views.detailed_prediction, name="detailed-prediction"),
     path('payment',views.payment, name="payment"),
+
     
     # Matches any html file
     # re_path(r'^.*\.*', views.pages, name='pages'),
