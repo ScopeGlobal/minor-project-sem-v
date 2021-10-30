@@ -6,15 +6,18 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <div class="row">
+  {% for d in data %}
+      {% if d.market_cap_rank < 3 %}
   <!--[ daily sales section ] start-->
   <div class="col-md-6 col-xl-4">
     <div class="card daily-sales">
       <div class="card-block">
-        <h6 class="mb-4">Bitcoin</h6>
-      <br/>
+        <h6 class="mb-4">{{d.name}}</h6>
+  
         <div class="row d-flex align-items-center">
           
           <div class="col-9">
+           
             <h3 class="f-w-300 d-flex align-items-center m-b-0">
               <i
                 class="
@@ -25,8 +28,9 @@
                   m-r-10
                 "
               ></i
-              >$ 249.95
+              >{{d.high_24h}}
             </h3>
+            
             <br>
           </div>
           <div class="col-9"><span>
@@ -41,22 +45,13 @@
             >
           </span></div>
           <div class="col-3 text-right">
-            <p class="m-b-0">67%</p>
+            <p class="m-b-0"> {{d.price_change_percentage_24h}} %</p>
           </div>
           
         </div>
-        <div class="progress m-t-30" style="height: 7px">
-          <div
-            class="progress-bar progress-c-theme"
-            role="progressbar"
-            style="width: 50%"
-            aria-valuenow="50"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          ></div>
-        </div>
         
       </div>
+      
       
     </div>
    
@@ -65,8 +60,9 @@
   <!--[ Monthly  sales section ] starts-->
   <div class="col-md-6 col-xl-4">
     <div class="card Monthly-sales">
+      
       <div class="card-block">
-        <h6 class="mb-4">Bitcoin</h6>
+        <h6 class="mb-4">{{d.name}}</h6>
         <div class="row d-flex align-items-center">
           <div class="col-9">
             <h3 class="f-w-300 d-flex align-items-center m-b-0">
@@ -79,7 +75,7 @@
                   m-r-10
                 "
               ></i
-              >$ 2.942.32
+              >{{d.low_24h}}
             </h3>
             <br>
           </div>
@@ -94,20 +90,9 @@
               >Detailed Prediction</a
             >
           </span></div>
-          <div class="col-3 text-right">
-            <p class="m-b-0">36%</p>
-          </div>
+
         </div>
-        <div class="progress m-t-30" style="height: 7px">
-          <div
-            class="progress-bar progress-c-theme2"
-            role="progressbar"
-            style="width: 35%"
-            aria-valuenow="35"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          ></div>
-        </div>
+        
       </div>
     </div>
   </div>
@@ -116,7 +101,7 @@
   <div class="col-md-12 col-xl-4">
     <div class="card yearly-sales">
       <div class="card-block">
-        <h6 class="mb-4">Yearly Sales</h6>
+        <h6 class="mb-4">Price</h6>
         <div class="row d-flex align-items-center">
           <div class="col-9">
             <h3 class="f-w-300 d-flex align-items-center m-b-0">
@@ -129,7 +114,7 @@
                   m-r-10
                 "
               ></i
-              >$ 8.638.32
+              >$ {{d.current_price}}
             </h3>
             <br>
           </div>
@@ -144,63 +129,65 @@
               >Detailed Prediction</a
             >
           </span></div>
-          <div class="col-3 text-right">
-            <p class="m-b-0">80%</p>
-          </div>
-        </div>
-        <div class="progress m-t-30" style="height: 7px">
-          <div
-            class="progress-bar progress-c-theme"
-            role="progressbar"
-            style="width: 70%"
-            aria-valuenow="70"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          ></div>
+
         </div>
       </div>
     </div>
   </div>
+  {% endif %}
+    {% endfor %}
   <!--[ Chart ...can add new components in between] end-->
   <!--[ Chart ] start-->
-  <div class="col-xl-20 col-md-20">
       <!-- Prediction Chart -->
       
-    <div class="card Recent-Users">
-      <div class="card-header">
-        <h5>Prediction Chart</h5>
-        <button
-            type="button"
-            name="load_data"
-            id="load_data"
-            class="btn btn-info"
-          >
-            Load Data
-          </button>
-      </div>
-      <div class="card-block px-3 py-3">
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <div id="currency_table"></div>
-          </table>
-        </div>
-      </div>
-    </div>
+    
+  </div>
+  <div class="col-xl-2 col-md-20">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Rank</th>
+          <th scope="col">Logo</th>
+          <th scope="col">Coin</th>
+          <th scope="col">Symbol</th>
+          <th scope="col">Market cap</th>
+          <th scope="col">Price</th>
+          <th scope="col">High 24 hours</th>
+          <th scope="col">Low 24 hours</th>
+          <th scope="col">Price Change 24 hours</th>
+          <th scope="col">Price Change % 24 hours </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if data %}
+            {% for obj in data %}
+             <tr>
+              <th class="align-middle">{{obj.market_cap_rank}}</th>
+               <th><img src= {{obj.image}} height="50"></th>
+               <th class="align-middle">{{obj.name}}</th>
+               <th class="align-middle">{{obj.symbol}}</th>
+               <th class="align-middle"> {{obj.market_cap}} </th>
+               <th class="align-middle"> {{obj.current_price}} </th>
+               <th class="align-middle"> {{obj.high_24h}} </th>
+               <th class="align-middle"> {{obj.low_24h}} </th>
+               <th class="align-middle"> {{obj.price_change_24h}} </th>
+               <th class="align-middle"> {{obj.price_change_percentage_24h}} </th>
+             </tr>
+            {% endfor %}
+        {% else%}
+        <h3>Nothing here</h3>
+        {% endif %}
+      </tbody>
+    </table>
   </div>
   <!--[ Prediction Chart ] end-->
 
-  <!-- [ statistics year chart ] start -->
-  <!-- [ statistics year chart ] end -->
-
-  <!-- [ rating list ] starts-->
   <div class="col-xl-4 col-md-6">
     <div class="card user-list">
     
       </div>
     </div>
   </div>
-  <!-- [ rating list ] end-->
-  
   </div>
 </div>
 <script>

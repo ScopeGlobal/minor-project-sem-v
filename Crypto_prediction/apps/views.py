@@ -7,6 +7,8 @@ from .forms import SignInForm, SignUpForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render
+import requests
+from .models import ConsultantForm
 
 # chart imports
 from django.db.models import ObjectDoesNotExist
@@ -17,14 +19,22 @@ import razorpay
 from django.views.decorators.csrf import csrf_exempt
 
 # training imports
-from Training.train_price import real_time_test, train_price
+# from Training.train_price import real_time_test, train_price
 
 # Create your views here.
+
+
 def index(request):
-    return render(request, 'index.html')
+
+    url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&order=market_cap_desc&per_page=100&page=1&sparkline=false'
+    data = requests.get(url).json()
+    
+    return render(request, 'index.html', {"data" : data})
 
 def coin_info(request):
-    return render(request, 'visualization/coin-info.html')
+    url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&order=market_cap_desc&per_page=100&page=1&sparkline=false'
+    data = requests.get(url).json()
+    return render(request, 'visualization/coin-info.html', {"data" : data})
 
 def detailed_prediction(request):
     return render(request, 'visualization/detailed-prediction.html')
@@ -88,28 +98,31 @@ def profile(request, username=None):
         return render(request,"index.html",{"user" : user})
 
 
+def consultant_form(request):
+    if request.method=='POST':
+        form =ConsultantForm(request.POST)
+        name=request.POST.get('name')
+        email=request.POST.get('email')
+        phone_no=request.POST.get('phone_no')
+        bank_ifsc=request.POST.get('bank_ifsc')
+        bank_acc_no=request.POST.get('bank_acc_no')
+        exp=request.POST.get('exp')
+        ins=ConsultantForm(name=name,email=email,phone_no=phone_no,bank_ifsc=bank_ifsc,bank_acc_no=bank_acc_no,exp=exp)
+        ins.save()
+        messages.success(request, 'Details submitted successfully')
+        
+        return redirect('payment')
+    else:
+        form = ConsultantForm()
+    return render(request,'payment/consultant.html')
+
+
 def payment(request):
-    if request.method == "POST":
-        name = request.POST.get('name')
-        amount = 50000
-
-        client = razorpay.Client(
-            auth=("rzp_test_YozdWOsMuM2BVO", "TTT1BipZ1IIL1ZdCuZwOMDIM"))
-
-        payment = client.order.create({'amount': amount, 'currency': 'INR',
-                                       'payment_capture': '1'})
-    return render(request, 'payment/payment.html')
+    db_list = ConsultantForm.objects.all()
+    return render(request,"payment/payment.html",{"db_list":db_list})
 
 @csrf_exempt
 def success(request):
     return render("success")
 
-def real_time_test(request):
-    context ={}
-    days = []
-    result =[]
-    results = real_time_test('Bitcoin')
-    days = results.days
-    result = results.result
-    context = {"days" : days , "result" : result}
-    return render(request, 'visualization/coin-info.html', context)
+
