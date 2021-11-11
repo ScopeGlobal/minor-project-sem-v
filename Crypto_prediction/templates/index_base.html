@@ -58,7 +58,7 @@
     <nav class="pcoded-navbar">
       <div class="navbar-wrapper">
         <div class="navbar-brand header-logo">
-          <a href="index.html" class="b-brand">
+          <a href="{% url 'index' %}" class="b-brand">
             <div class="b-bg">
               <i class="feather icon-trending-up"></i>
             </div>
@@ -202,22 +202,12 @@
         </ul>
         <ul class="navbar-nav ml-auto">
           <li>
-            <div class="dropdown">
-              <a
-                class="dropdown-toggle"
-                href="javascript:"
-                data-toggle="dropdown"
-                ><i class="icon feather icon-bell"></i
-              ></a>
-            </div>
-          </li>
-          <li>
             <div class="dropdown drp-user">
               <a
                 href="javascript:"
                 class="dropdown-toggle"
                 data-toggle="dropdown"
-              >
+                ><span>Settings</span>
                 <i class="icon feather icon-settings"></i>
               </a>
               <div
@@ -229,7 +219,7 @@
                     class="img-radius"
                     alt="User-Profile-Image"
                   />
-                  <span> {{user.username}}</span>
+                  <span>{{user.username}}</span>
                 </div>
                 <ul class="pro-body">
                   <li>
