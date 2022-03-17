@@ -8,102 +8,46 @@
 <div class="row">
   {% for d in data %}
       {% if d.market_cap_rank < 3 %}
-  <!--[ daily sales section ] start-->
-  <div class="col-md-6 col-xl-4">
-    <div class="card daily-sales">
-      <div class="card-block">
-        <h6 class="mb-4">{{d.name}}</h6>
-  
-        <div class="row d-flex align-items-center">
-          
-          <div class="col-9">
-           
-            <h3 class="f-w-300 d-flex align-items-center m-b-0">
-              <i
-                class="
-                  feather
-                  icon-arrow-up
-                  text-c-green
-                  f-30
-                  m-r-10
-                "
-              ></i
-              >{{d.high_24h}}
-            </h3>
-            
-            <br>
-          </div>
-          <div class="col-9"><span>
-            <a
-              href="{% url 'coin-info' %}"
-              class="label theme-bg2 text-white f-12"
-              >Coin Info</a
-            ><a
-              href="{% url 'detailed-prediction' %}"
-              class="label theme-bg text-white f-12"
-              >Detailed Prediction</a
-            >
-          </span></div>
-          <div class="col-3 text-right">
-            <p class="m-b-0"> {{d.price_change_percentage_24h}} %</p>
-          </div>
-          
-        </div>
-        
-      </div>
-      
-      
-    </div>
-   
-  </div>
-  <!--[ daily sales section ] end-->
-  <!--[ Monthly  sales section ] starts-->
-  <div class="col-md-6 col-xl-4">
-    <div class="card Monthly-sales">
-      
-      <div class="card-block">
-        <h6 class="mb-4">{{d.name}}</h6>
-        <div class="row d-flex align-items-center">
-          <div class="col-9">
-            <h3 class="f-w-300 d-flex align-items-center m-b-0">
-              <i
-                class="
-                  feather
-                  icon-arrow-down
-                  text-c-red
-                  f-30
-                  m-r-10
-                "
-              ></i
-              >{{d.low_24h}}
-            </h3>
-            <br>
-          </div>
-          <div class="col-9"><span>
-            <a
-              href="{% url 'coin-info' %}"
-              class="label theme-bg2 text-white f-12"
-              >Coin Info</a
-            ><a
-              href="{% url 'detailed-prediction' %}"
-              class="label theme-bg text-white f-12"
-              >Detailed Prediction</a
-            >
-          </span></div>
+  <!--[ Currency Section ] start-->
 
-        </div>
+
+  <div class="card card-social">
+    <div class="card-block border-bottom">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-auto">
+                <img src="{{d.image}}" class="text-primary f-20" height="50"><span><h3>{{d.name}}</h3></span>
+            </div>
         
-      </div>
+            <div class="col text-right">
+                <h3>$ {{d.current_price}}</h3>
+                <h5 class="text-c-green mb-0">{{d.price_change_percentage_24h}}% <span class="text-muted">Change in 24h</span></h5>
+            </div>
+        </div>
     </div>
-  </div>
-  <!--[ Monthly  sales section ] end-->
+    <div class="card-block">
+        <div class="row align-items-center justify-content-center card-active">
+            <div class="col-6">
+                <h6 class="text-center m-b-10"><span class="text-muted m-r-5">High 24hrs:</span>{{d.high_24h}}</h6>
+               
+            </div>
+            <div class="col-6">
+                <h6 class="text-center  m-b-10"><span class="text-muted m-r-5">Low 24hrs:</span>{{d.low_24h}}</h6>
+                
+            </div>
+      
+          </div>
+        </div>
+</div>
+  <!--[ Currency Section ] end-->
+
   <!--[ year  sales section ] starts-->
   <div class="col-md-12 col-xl-4">
     <div class="card yearly-sales">
       <div class="card-block">
-        <h6 class="mb-4">Price</h6>
+        <h6 class="mb-4">{{d.name}}</h6>
         <div class="row d-flex align-items-center">
           <div class="col-9">
+            <p>Market Cap</p>
             <h3 class="f-w-300 d-flex align-items-center m-b-0">
               <i
                 class="
@@ -114,7 +58,7 @@
                   m-r-10
                 "
               ></i
-              >$ {{d.current_price}}
+              >$ {{d.market_cap}}
             </h3>
             <br>
           </div>

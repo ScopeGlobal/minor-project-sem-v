@@ -38,7 +38,9 @@ def coin_info(request):
     return render(request, 'visualization/coin-info.html', {"data" : data})
 
 def detailed_prediction(request):
-    return render(request, 'visualization/detailed-prediction.html')
+    url = 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=30&interval=daily'
+    data = requests.get(url).json()
+    return render(request, 'visualization/detailed-prediction.html', {"data" : data})
 
 def registerPage(request):
 

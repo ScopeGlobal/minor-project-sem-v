@@ -89,10 +89,10 @@
         url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTs2vlLw8bXXhqmODkgffmqHPrHMB5tyHE0EPziBg1sFkXXtCZrY2dru1HVRyWnIcEhH6jvBqrtsL6d/pub?gid=145772431&single=true&output=csv",
         dataType: "text",
         success: function (data) {
-          var employee_data = data.split(/\r?\n|\r/);
+          var currency_data = data.split(/\r?\n|\r/);
           var table_data = '<table class="table table-hover">';
           for (var count = 0; count < 50; count++) {
-            var cell_data = employee_data[count].split(",");
+            var cell_data = currency_data[count].split(",");
             table_data += "<tr>";
             for (
               var cell_count = 0;
@@ -116,6 +116,7 @@
     });
   });
 </script>
+
 {% endblock content %}
 
 <!-- Specific JS goes HERE -->
